@@ -1,5 +1,14 @@
 import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
+
+// Budget range options
+const budgetRanges = [
+    { value: '10k-25k', label: '₹10K', fullLabel: '₹10,000 - ₹25,000' },
+    { value: '25k-50k', label: '₹25K', fullLabel: '₹25,000 - ₹50,000' },
+    { value: '50k-1L', label: '₹50K', fullLabel: '₹50,000 - ₹1,00,000' },
+    { value: '1L-2L', label: '₹1L', fullLabel: '₹1,00,000 - ₹2,00,000' },
+    { value: '2L+', label: '₹2L+', fullLabel: '₹2,00,000+' }
+];
 
 export const ContactPage = () => {
     const [formData, setFormData] = useState({
@@ -10,14 +19,56 @@ export const ContactPage = () => {
         message: ''
     });
 
+    const [budgetIndex, setBudgetIndex] = useState(2); // Default to middle
+    const [isDragging, setIsDragging] = useState(false);
+    const sliderRef = useRef<HTMLDivElement>(null);
+
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    // Update budget when index changes
+    useEffect(() => {
+        setFormData(prev => ({
+            ...prev,
+            budget: budgetRanges[budgetIndex].value
+        }));
+    }, [budgetIndex]);
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setFormData(prev => ({
             ...prev,
             [e.target.name]: e.target.value
         }));
+    };
+
+    const handleSliderClick = (e: React.MouseEvent<HTMLDivElement>) => {
+        if (!sliderRef.current) return;
+        const rect = sliderRef.current.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const percentage = x / rect.width;
+        const newIndex = Math.round(percentage * (budgetRanges.length - 1));
+        setBudgetIndex(Math.max(0, Math.min(budgetRanges.length - 1, newIndex)));
+    };
+
+    const handleMouseDown = () => setIsDragging(true);
+    const handleMouseUp = () => setIsDragging(false);
+
+    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+        if (!isDragging || !sliderRef.current) return;
+        const rect = sliderRef.current.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const percentage = x / rect.width;
+        const newIndex = Math.round(percentage * (budgetRanges.length - 1));
+        setBudgetIndex(Math.max(0, Math.min(budgetRanges.length - 1, newIndex)));
+    };
+
+    const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
+        if (!sliderRef.current) return;
+        const rect = sliderRef.current.getBoundingClientRect();
+        const x = e.touches[0].clientX - rect.left;
+        const percentage = x / rect.width;
+        const newIndex = Math.round(percentage * (budgetRanges.length - 1));
+        setBudgetIndex(Math.max(0, Math.min(budgetRanges.length - 1, newIndex)));
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -27,6 +78,7 @@ export const ContactPage = () => {
         setIsSubmitting(false);
         setIsSubmitted(true);
         setFormData({ name: '', email: '', company: '', budget: '', message: '' });
+        setBudgetIndex(2);
         setTimeout(() => setIsSubmitted(false), 5000);
     };
 
@@ -177,32 +229,103 @@ export const ContactPage = () => {
                                             </div>
                                         </div>
 
-                                        <div className="grid md:grid-cols-2 gap-6">
-                                            <div>
-                                                <label className="block text-xs uppercase tracking-[0.15em] text-neutral-500 mb-3">Company</label>
-                                                <input
-                                                    type="text"
-                                                    name="company"
-                                                    value={formData.company}
-                                                    onChange={handleChange}
-                                                    className="w-full px-0 py-3 bg-transparent border-0 border-b border-neutral-300 focus:border-black focus:outline-none transition-colors duration-300"
-                                                    placeholder="Company name"
-                                                />
-                                            </div>
-                                            <div>
-                                                <label className="block text-xs uppercase tracking-[0.15em] text-neutral-500 mb-3">Budget</label>
-                                                <select
-                                                    name="budget"
-                                                    value={formData.budget}
-                                                    onChange={handleChange}
-                                                    className="w-full px-0 py-3 bg-transparent border-0 border-b border-neutral-300 focus:border-black focus:outline-none transition-colors duration-300 appearance-none cursor-pointer"
+                                        <div>
+                                            <label className="block text-xs uppercase tracking-[0.15em] text-neutral-500 mb-3">Company</label>
+                                            <input
+                                                type="text"
+                                                name="company"
+                                                value={formData.company}
+                                                onChange={handleChange}
+                                                className="w-full px-0 py-3 bg-transparent border-0 border-b border-neutral-300 focus:border-black focus:outline-none transition-colors duration-300"
+                                                placeholder="Company name"
+                                            />
+                                        </div>
+
+                                        {/* Budget Slider */}
+                                        <div>
+                                            <label className="block text-xs uppercase tracking-[0.15em] text-neutral-500 mb-3">Budget Range</label>
+
+                                            {/* Selected Budget Display */}
+                                            <div className="text-center mb-4">
+                                                <motion.span
+                                                    key={budgetIndex}
+                                                    initial={{ opacity: 0, y: -10 }}
+                                                    animate={{ opacity: 1, y: 0 }}
+                                                    className="text-lg font-medium text-black"
                                                 >
-                                                    <option value="">Select budget range</option>
-                                                    <option value="50k-100k">₹50,000 - ₹1,00,000</option>
-                                                    <option value="100k-300k">₹1,00,000 - ₹3,00,000</option>
-                                                    <option value="300k-500k">₹3,00,000 - ₹5,00,000</option>
-                                                    <option value="500k+">₹5,00,000+</option>
-                                                </select>
+                                                    {budgetRanges[budgetIndex].fullLabel}
+                                                </motion.span>
+                                            </div>
+
+                                            {/* Slider Track */}
+                                            <div
+                                                ref={sliderRef}
+                                                className="relative h-12 cursor-pointer select-none"
+                                                onClick={handleSliderClick}
+                                                onMouseDown={handleMouseDown}
+                                                onMouseUp={handleMouseUp}
+                                                onMouseLeave={handleMouseUp}
+                                                onMouseMove={handleMouseMove}
+                                                onTouchMove={handleTouchMove}
+                                            >
+                                                {/* Track Background */}
+                                                <div className="absolute top-1/2 left-0 right-0 h-[2px] bg-neutral-300 -translate-y-1/2" />
+
+                                                {/* Active Track */}
+                                                <motion.div
+                                                    className="absolute top-1/2 left-0 h-[2px] bg-black -translate-y-1/2"
+                                                    style={{ width: `${(budgetIndex / (budgetRanges.length - 1)) * 100}%` }}
+                                                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                                                />
+
+                                                {/* Step Markers */}
+                                                {budgetRanges.map((range, index) => (
+                                                    <div
+                                                        key={range.value}
+                                                        className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2"
+                                                        style={{ left: `${(index / (budgetRanges.length - 1)) * 100}%` }}
+                                                    >
+                                                        <motion.div
+                                                            className={`w-3 h-3 rounded-full border-2 transition-colors duration-200 ${index <= budgetIndex
+                                                                    ? 'bg-black border-black'
+                                                                    : 'bg-white border-neutral-300'
+                                                                }`}
+                                                            whileHover={{ scale: 1.2 }}
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                setBudgetIndex(index);
+                                                            }}
+                                                        />
+                                                    </div>
+                                                ))}
+
+                                                {/* Draggable Thumb */}
+                                                <motion.div
+                                                    className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-6 h-6 bg-black rounded-full shadow-lg cursor-grab active:cursor-grabbing flex items-center justify-center"
+                                                    style={{ left: `${(budgetIndex / (budgetRanges.length - 1)) * 100}%` }}
+                                                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                                                    whileHover={{ scale: 1.1 }}
+                                                    whileTap={{ scale: 0.95 }}
+                                                >
+                                                    <div className="w-2 h-2 bg-white rounded-full" />
+                                                </motion.div>
+                                            </div>
+
+                                            {/* Labels */}
+                                            <div className="flex justify-between mt-2">
+                                                {budgetRanges.map((range, index) => (
+                                                    <button
+                                                        key={range.value}
+                                                        type="button"
+                                                        onClick={() => setBudgetIndex(index)}
+                                                        className={`text-xs transition-colors duration-200 ${index === budgetIndex
+                                                                ? 'text-black font-medium'
+                                                                : 'text-neutral-400 hover:text-neutral-600'
+                                                            }`}
+                                                    >
+                                                        {range.label}
+                                                    </button>
+                                                ))}
                                             </div>
                                         </div>
 
@@ -225,8 +348,8 @@ export const ContactPage = () => {
                                             whileHover={{ scale: isSubmitting ? 1 : 1.02 }}
                                             whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
                                             className={`w-full py-5 font-medium tracking-wide transition-all duration-300 flex items-center justify-center gap-3 mt-8 ${isSubmitting
-                                                    ? 'bg-neutral-300 text-neutral-500 cursor-not-allowed'
-                                                    : 'bg-black text-white hover:bg-neutral-900'
+                                                ? 'bg-neutral-300 text-neutral-500 cursor-not-allowed'
+                                                : 'bg-black text-white hover:bg-neutral-900'
                                                 }`}
                                         >
                                             {isSubmitting ? (

@@ -1,5 +1,10 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { useRef, useEffect } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const services = [
   {
@@ -29,6 +34,55 @@ const services = [
 ];
 
 export const WhatWeDo = () => {
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  useEffect(() => {
+    // Respect prefers-reduced-motion
+    const prefersReducedMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)'
+    ).matches;
+
+    if (prefersReducedMotion) {
+      cardRefs.current.forEach((el) => {
+        if (el) el.style.setProperty('--liquid-level', '0%');
+      });
+      return;
+    }
+
+    const animations: gsap.core.Tween[] = [];
+
+    cardRefs.current.forEach((element, index) => {
+      if (!element) return;
+
+      // Slight variation in initial fill for visual interest
+      const initialFill = 0.95 + (index % 2) * 0.05;
+
+      const animation = gsap.fromTo(
+        element,
+        { '--liquid-level': `${initialFill * 100}%` },
+        {
+          '--liquid-level': '0%',
+          ease: 'power1.inOut',
+          scrollTrigger: {
+            trigger: element,
+            start: 'top 85%',
+            end: 'top 25%',
+            scrub: 1.2,
+          },
+        }
+      );
+
+      animations.push(animation);
+    });
+
+    return () => {
+      animations.forEach((anim) => {
+        anim.scrollTrigger?.kill();
+        anim.kill();
+      });
+    };
+  }, []);
+
   return (
     <section className="bg-white py-24 md:py-32">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
@@ -81,46 +135,41 @@ export const WhatWeDo = () => {
           </motion.div>
         </div>
 
-        {/* Services Grid */}
+        {/* Services Grid with Liquid Reveal */}
         <div className="grid md:grid-cols-2 gap-px bg-neutral-200">
           {services.map((service, index) => (
             <motion.div
               key={service.title}
+              ref={(el) => { cardRefs.current[index] = el; }}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
               viewport={{ once: true }}
-              className="group bg-white p-10 md:p-12 hover:bg-black transition-all duration-500 cursor-pointer"
+              className="liquid-reveal-card group bg-white p-8 md:p-10 hover:bg-black transition-all duration-500 cursor-pointer"
             >
-              <div className="flex items-start justify-between mb-8">
-                <span className="text-5xl font-extralight text-neutral-200 group-hover:text-white/20 transition-colors duration-500">
-                  {service.number}
-                </span>
-              </div>
+              {/* Number */}
+              <span className="text-4xl font-extralight text-neutral-200 group-hover:text-white/20 transition-colors duration-500 block mb-6">
+                {service.number}
+              </span>
 
-              <h3 className="text-xl md:text-2xl font-medium text-black group-hover:text-white mb-4 transition-colors duration-500">
+              {/* Content */}
+              <h3 className="text-lg font-medium text-black group-hover:text-white mb-3 transition-colors duration-500">
                 {service.title}
               </h3>
-
-              <p className="text-neutral-500 group-hover:text-neutral-400 text-sm leading-relaxed mb-6 transition-colors duration-500">
+              <p className="text-neutral-500 group-hover:text-neutral-400 text-sm leading-relaxed mb-5 transition-colors duration-500">
                 {service.description}
               </p>
 
-              <div className="flex flex-wrap gap-3">
+              {/* Features */}
+              <div className="flex flex-wrap gap-2">
                 {service.features.map((feature) => (
                   <span
                     key={feature}
-                    className="px-3 py-1 border border-neutral-200 text-neutral-500 text-xs tracking-wide group-hover:border-white/20 group-hover:text-white/60 transition-colors duration-500"
+                    className="px-2 py-1 border border-neutral-200 text-neutral-500 text-xs tracking-wide group-hover:border-white/20 group-hover:text-white/60 transition-colors duration-500"
                   >
                     {feature}
                   </span>
                 ))}
-              </div>
-
-              <div className="mt-8 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                <svg className="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none">
-                  <path d="M5 12h14m-7-7l7 7-7 7" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
               </div>
             </motion.div>
           ))}

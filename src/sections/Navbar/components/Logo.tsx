@@ -1,7 +1,11 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
-export const Logo = () => {
+interface LogoProps {
+  isOnLightBg?: boolean;
+}
+
+export const Logo = ({ isOnLightBg = false }: LogoProps) => {
   return (
     <motion.div
       initial={{ opacity: 0, x: -20 }}
@@ -22,7 +26,10 @@ export const Logo = () => {
           />
         </motion.div>
         <div className="hidden md:block">
-          <span className="text-white font-medium text-lg tracking-[0.1em] group-hover:text-neutral-300 transition-colors duration-300">
+          <span className={`font-medium text-lg tracking-[0.1em] transition-colors duration-300 ${isOnLightBg
+              ? 'text-black group-hover:text-neutral-600'
+              : 'text-white group-hover:text-neutral-300'
+            }`}>
             NAMEH<span className="font-light opacity-60">.CO</span>
           </span>
         </div>

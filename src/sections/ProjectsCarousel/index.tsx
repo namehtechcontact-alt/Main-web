@@ -9,35 +9,35 @@ gsap.registerPlugin(ScrollTrigger);
 const projects = [
   {
     number: "01",
-    title: "TechStart India",
-    category: "SaaS Dashboard",
-    imageUrl: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=800&fit=crop",
-    tags: ["React", "Node.js", "MongoDB"],
-    description: "A comprehensive SaaS dashboard with real-time analytics, user management, and seamless integrations."
+    title: "Its Pure Vit",
+    category: "Health & Wellness",
+    videoUrl: "/itspurevit.mp4",
+    tags: ["Branding", "Marketing", "Video Production"],
+    description: "Complete brand identity and marketing campaign for a premium health supplements company."
   },
   {
     number: "02",
-    title: "Wellness Hub",
-    category: "E-commerce",
-    imageUrl: "https://images.unsplash.com/photo-1545205597-3d9d02c29597?w=800&h=800&fit=crop",
-    tags: ["Next.js", "Stripe", "Prisma"],
-    description: "Premium wellness e-commerce platform with subscription services and personalized recommendations."
+    title: "Maharaja Palace",
+    category: "Hospitality",
+    videoUrl: "/maharaja-palace.mp4",
+    tags: ["Web Design", "SEO", "Social Media"],
+    description: "Luxury hotel digital presence with stunning visuals and seamless booking experience."
   },
   {
     number: "03",
-    title: "EduLearn Platform",
-    category: "Web Application",
-    imageUrl: "https://images.unsplash.com/photo-1501504905252-473c47e087f8?w=800&h=800&fit=crop",
-    tags: ["React", "Firebase", "Video"],
-    description: "Interactive online learning platform with video courses, quizzes, and progress tracking."
+    title: "Indus School",
+    category: "Education",
+    videoUrl: "/indus.mp4",
+    tags: ["Web Development", "UI/UX", "Content"],
+    description: "Modern educational platform showcasing excellence in academics and extracurricular activities."
   },
   {
     number: "04",
-    title: "BrandCo Agency",
-    category: "Portfolio Website",
-    imageUrl: "https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=800&h=800&fit=crop",
-    tags: ["Next.js", "GSAP", "CMS"],
-    description: "Creative agency portfolio with stunning animations and smooth transitions."
+    title: "Hitech Homes",
+    category: "Real Estate",
+    videoUrl: "/hitech.mp4",
+    tags: ["Branding", "Web Design", "Marketing"],
+    description: "Premium real estate developer with cutting-edge digital presence and virtual property tours."
   }
 ];
 
@@ -136,12 +136,15 @@ export const ProjectsCarousel = () => {
                 </div>
               </div>
 
-              {/* Center - Image */}
+              {/* Center - Video */}
               <div className="col-span-12 md:col-span-4 relative">
-                <div className="aspect-square w-full max-w-[450px] mx-auto overflow-hidden grayscale hover:grayscale-0 transition-all duration-700">
-                  <img
-                    src={project.imageUrl}
-                    alt={project.title}
+                <div className="aspect-video w-full max-w-[550px] mx-auto overflow-hidden rounded-lg">
+                  <video
+                    src={project.videoUrl}
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
                     className="w-full h-full object-cover"
                   />
                 </div>

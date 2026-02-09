@@ -145,6 +145,7 @@
     0% {
       transform: translateX(0);
     }
+
     100% {
       transform: translateX(-50%);
     }
@@ -159,6 +160,7 @@
       opacity: 0;
       transform: translateY(30px);
     }
+
     to {
       opacity: 1;
       transform: translateY(0);
@@ -174,6 +176,7 @@
       opacity: 0;
       transform: scale(0.9);
     }
+
     to {
       opacity: 1;
       transform: scale(1);
@@ -201,21 +204,20 @@
     line-height: 0.85;
     letter-spacing: -0.04em;
     text-transform: uppercase;
-    background: linear-gradient(135deg, 
-      rgba(255,255,255,1) 0%, 
-      rgba(255,255,255,0.9) 25%,
-      rgba(255,255,255,1) 50%,
-      rgba(255,255,255,0.9) 75%,
-      rgba(255,255,255,1) 100%
-    );
+    background: linear-gradient(135deg,
+        rgba(255, 255, 255, 1) 0%,
+        rgba(255, 255, 255, 0.9) 25%,
+        rgba(255, 255, 255, 1) 50%,
+        rgba(255, 255, 255, 0.9) 75%,
+        rgba(255, 255, 255, 1) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    text-shadow: 
-      0 0 40px rgba(255,255,255,0.3),
-      0 0 80px rgba(255,255,255,0.2),
-      0 4px 8px rgba(0,0,0,0.3);
-    filter: drop-shadow(0 4px 12px rgba(0,0,0,0.4));
+    text-shadow:
+      0 0 40px rgba(255, 255, 255, 0.3),
+      0 0 80px rgba(255, 255, 255, 0.2),
+      0 4px 8px rgba(0, 0, 0, 0.3);
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.4));
   }
 
   /* Modern hero company name styling */
@@ -261,7 +263,7 @@
     .hero-section {
       min-height: 100vh;
     }
-    
+
     .hero-large-text {
       font-size: clamp(2rem, 12vw, 6rem);
     }
@@ -296,6 +298,86 @@
   ::-webkit-scrollbar-thumb:hover {
     background: #555;
   }
+
+  /* ========================================
+   * Liquid Reveal Card Animation
+   * Scroll-linked liquid drain/fill effect
+   * ======================================== */
+
+  .liquid-reveal-card {
+    position: relative;
+    overflow: hidden;
+    --liquid-level: 100%;
+  }
+
+  /* Matte black liquid overlay */
+  .liquid-reveal-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: #0a0a0a;
+    /* Soft curved edge via clip-path */
+    clip-path: ellipse(120% calc(var(--liquid-level) + 5%) at 50% 0%);
+    pointer-events: none;
+    z-index: 10;
+    /* Slight blur for soft edge */
+    will-change: clip-path;
+  }
+
+  /* Reduced motion: no liquid animation */
+  @media (prefers-reduced-motion: reduce) {
+    .liquid-reveal-card::before {
+      display: none;
+    }
+
+    .liquid-reveal-card {
+      --liquid-level: 0%;
+    }
+  }
+
+  /* ========================================
+   * Wave Card Animation
+   * Scroll-driven wave effect for process grid
+   * ======================================== */
+
+  .wave-card {
+    position: relative;
+    --wave-intensity: 0;
+    transform: translateY(calc(var(--wave-intensity) * -2px));
+    transition: transform 0.05s linear;
+  }
+
+  /* Subtle gradient overlay that pulses with wave */
+  .wave-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg,
+        rgba(0, 0, 0, 0) 0%,
+        rgba(0, 0, 0, calc(var(--wave-intensity) * 0.025)) 50%,
+        rgba(0, 0, 0, 0) 100%);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* Subtle box shadow elevation */
+  .wave-card {
+    box-shadow:
+      0 calc(var(--wave-intensity) * 4px) calc(var(--wave-intensity) * 12px) rgba(0, 0, 0, calc(var(--wave-intensity) * 0.08));
+  }
+
+  /* Reduced motion: no wave animation */
+  @media (prefers-reduced-motion: reduce) {
+    .wave-card {
+      --wave-intensity: 0;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .wave-card::after {
+      display: none;
+    }
+  }
 }
 
 @layer utilities {
@@ -322,7 +404,7 @@
   }
 
   .text-gradient-white {
-    background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.6) 100%);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.6) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;

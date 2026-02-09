@@ -1,5 +1,10 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { useRef, useEffect } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const services = [
   {
@@ -41,6 +46,55 @@ const services = [
 ];
 
 export const NewsSection = () => {
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  useEffect(() => {
+    // Respect prefers-reduced-motion
+    const prefersReducedMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)'
+    ).matches;
+
+    if (prefersReducedMotion) {
+      cardRefs.current.forEach((el) => {
+        if (el) el.style.setProperty('--liquid-level', '0%');
+      });
+      return;
+    }
+
+    const animations: gsap.core.Tween[] = [];
+
+    cardRefs.current.forEach((element, index) => {
+      if (!element) return;
+
+      // Slight variation in initial fill for visual interest
+      const initialFill = 0.93 + (index % 3) * 0.035;
+
+      const animation = gsap.fromTo(
+        element,
+        { '--liquid-level': `${initialFill * 100}%` },
+        {
+          '--liquid-level': '0%',
+          ease: 'power1.inOut',
+          scrollTrigger: {
+            trigger: element,
+            start: 'top 85%',
+            end: 'top 25%',
+            scrub: 1.2,
+          },
+        }
+      );
+
+      animations.push(animation);
+    });
+
+    return () => {
+      animations.forEach((anim) => {
+        anim.scrollTrigger?.kill();
+        anim.kill();
+      });
+    };
+  }, []);
+
   return (
     <section className="relative bg-neutral-50 overflow-hidden py-24 md:py-32">
       {/* Subtle Pattern */}
@@ -82,16 +136,17 @@ export const NewsSection = () => {
           </p>
         </motion.div>
 
-        {/* Services Grid */}
+        {/* Services Grid with Liquid Reveal */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-neutral-200">
           {services.map((service, index) => (
             <motion.div
               key={service.title}
+              ref={(el) => { cardRefs.current[index] = el; }}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.05 }}
               viewport={{ once: true }}
-              className="group bg-white p-8 md:p-10 hover:bg-black transition-all duration-500 cursor-pointer"
+              className="liquid-reveal-card group bg-white p-8 md:p-10 hover:bg-black transition-all duration-500 cursor-pointer"
             >
               {/* Number */}
               <span className="text-4xl font-extralight text-neutral-200 group-hover:text-white/20 transition-colors duration-500 block mb-6">

@@ -2,6 +2,7 @@ import { MobileMenu } from "@/sections/MobileMenu";
 import { Navbar } from "@/sections/Navbar";
 import { Footer } from "@/sections/Footer";
 import { CustomCursor } from "@/components/CustomCursor";
+import { ScrollToTop } from "@/components/ScrollToTop";
 import { MenuProvider } from "@/context/MenuContext";
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { HomePage, ServicesPage, PortfolioPage, AboutPage, ContactPage } from "@/pages";
@@ -23,6 +24,7 @@ const AppContent = () => {
 
   return (
     <div className="min-h-screen bg-stone-50 font-switzer">
+      <ScrollToTop />
       <CustomCursor />
 
       {/* Navigation */}

@@ -306,32 +306,30 @@
 
   .liquid-reveal-card {
     position: relative;
-    overflow: hidden;
+    /* overflow: hidden; - moved to component class for flexibilty */
     --liquid-level: 100%;
   }
 
-  /* Matte black liquid overlay */
-  .liquid-reveal-card::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: #0a0a0a;
-    /* Soft curved edge via clip-path */
-    clip-path: ellipse(120% calc(var(--liquid-level) + 5%) at 50% 0%);
-    pointer-events: none;
-    z-index: 10;
-    /* Slight blur for soft edge */
+  /* Clip the dark theme layer based on liquid level */
+  .liquid-reveal-layer {
+    /*
+      ellipse(width height at x y)
+      150% width ensures full horizontal coverage
+      calc(var(--liquid-level) + 10%) ensures full vertical coverage at 100%
+      at 50% 0% anchors it to top-center
+    */
+    clip-path: ellipse(150% calc(var(--liquid-level) + 10%) at 50% 0%);
     will-change: clip-path;
   }
 
-  /* Reduced motion: no liquid animation */
+  /* Reduced motion: Show Light theme (liquid level 0%) */
   @media (prefers-reduced-motion: reduce) {
-    .liquid-reveal-card::before {
-      display: none;
-    }
-
     .liquid-reveal-card {
       --liquid-level: 0%;
+    }
+
+    .liquid-reveal-layer {
+      display: none;
     }
   }
 

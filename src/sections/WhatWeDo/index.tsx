@@ -1,10 +1,6 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { useRef, useEffect } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
+import { ThemeLiquidCard } from '../../components/ThemeLiquidCard';
 
 const services = [
   {
@@ -34,55 +30,6 @@ const services = [
 ];
 
 export const WhatWeDo = () => {
-  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
-
-  useEffect(() => {
-    // Respect prefers-reduced-motion
-    const prefersReducedMotion = window.matchMedia(
-      '(prefers-reduced-motion: reduce)'
-    ).matches;
-
-    if (prefersReducedMotion) {
-      cardRefs.current.forEach((el) => {
-        if (el) el.style.setProperty('--liquid-level', '0%');
-      });
-      return;
-    }
-
-    const animations: gsap.core.Tween[] = [];
-
-    cardRefs.current.forEach((element, index) => {
-      if (!element) return;
-
-      // Slight variation in initial fill for visual interest
-      const initialFill = 0.95 + (index % 2) * 0.05;
-
-      const animation = gsap.fromTo(
-        element,
-        { '--liquid-level': `${initialFill * 100}%` },
-        {
-          '--liquid-level': '0%',
-          ease: 'power1.inOut',
-          scrollTrigger: {
-            trigger: element,
-            start: 'top 85%',
-            end: 'top 25%',
-            scrub: 1.2,
-          },
-        }
-      );
-
-      animations.push(animation);
-    });
-
-    return () => {
-      animations.forEach((anim) => {
-        anim.scrollTrigger?.kill();
-        anim.kill();
-      });
-    };
-  }, []);
-
   return (
     <section className="bg-white py-24 md:py-32">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
@@ -138,40 +85,38 @@ export const WhatWeDo = () => {
         {/* Services Grid with Liquid Reveal */}
         <div className="grid md:grid-cols-2 gap-px bg-neutral-200">
           {services.map((service, index) => (
-            <motion.div
+            <ThemeLiquidCard
               key={service.title}
-              ref={(el) => { cardRefs.current[index] = el; }}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              viewport={{ once: true }}
-              className="liquid-reveal-card group bg-white p-8 md:p-10 hover:bg-black transition-all duration-500 cursor-pointer"
+              initialFill={0.95 + (index % 2) * 0.05}
+              className="group cursor-pointer hover:bg-neutral-50"
             >
-              {/* Number */}
-              <span className="text-4xl font-extralight text-neutral-200 group-hover:text-white/20 transition-colors duration-500 block mb-6">
-                {service.number}
-              </span>
+              <div className="p-8 md:p-10 h-full flex flex-col">
+                {/* Number */}
+                <span className="text-4xl font-extralight text-neutral-300 group-hover:text-black/20 dark:text-neutral-700 dark:group-hover:text-white/20 transition-colors duration-500 block mb-6">
+                  {service.number}
+                </span>
 
-              {/* Content */}
-              <h3 className="text-lg font-medium text-black group-hover:text-white mb-3 transition-colors duration-500">
-                {service.title}
-              </h3>
-              <p className="text-neutral-500 group-hover:text-neutral-400 text-sm leading-relaxed mb-5 transition-colors duration-500">
-                {service.description}
-              </p>
+                {/* Content */}
+                <h3 className="text-lg font-medium mb-3">
+                  {service.title}
+                </h3>
+                <p className="text-neutral-500 text-sm leading-relaxed mb-5 flex-grow">
+                  {service.description}
+                </p>
 
-              {/* Features */}
-              <div className="flex flex-wrap gap-2">
-                {service.features.map((feature) => (
-                  <span
-                    key={feature}
-                    className="px-2 py-1 border border-neutral-200 text-neutral-500 text-xs tracking-wide group-hover:border-white/20 group-hover:text-white/60 transition-colors duration-500"
-                  >
-                    {feature}
-                  </span>
-                ))}
+                {/* Features */}
+                <div className="flex flex-wrap gap-2 mt-auto">
+                  {service.features.map((feature) => (
+                    <span
+                      key={feature}
+                      className="px-2 py-1 border border-neutral-200 text-neutral-500 text-xs tracking-wide"
+                    >
+                      {feature}
+                    </span>
+                  ))}
+                </div>
               </div>
-            </motion.div>
+            </ThemeLiquidCard>
           ))}
         </div>
 

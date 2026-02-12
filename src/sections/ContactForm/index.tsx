@@ -74,12 +74,40 @@ export const ContactForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    setIsSubmitting(false);
-    setIsSubmitted(true);
-    setFormData({ name: '', email: '', company: '', budget: '', message: '' });
-    setBudgetIndex(2);
-    setTimeout(() => setIsSubmitted(false), 5000);
+
+    try {
+      // Replace this URL with your Google Apps Script Web App URL
+      const GOOGLE_SCRIPT_URL = 'YOUR_GOOGLE_SCRIPT_URL_HERE';
+      
+      const formDataToSend = {
+        name: formData.name,
+        email: formData.email,
+        company: formData.company,
+        budget: budgetRanges[budgetIndex].fullLabel,
+        message: formData.message,
+        timestamp: new Date().toLocaleString()
+      };
+
+      const response = await fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formDataToSend)
+      });
+
+      // no-cors mode doesn't allow reading response, so we assume success
+      setIsSubmitted(true);
+      setFormData({ name: '', email: '', company: '', budget: '', message: '' });
+      setBudgetIndex(2);
+      setTimeout(() => setIsSubmitted(false), 5000);
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      alert('There was an error submitting the form. Please try again or email us directly.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (

@@ -1,83 +1,200 @@
 import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 
-const categories = ['All', 'Websites', 'Web Apps', 'E-commerce', 'Landing Pages'];
+const categories = ['All', 'Video Projects', 'Web Apps', 'Websites'];
 
 const projects = [
+    // Video Projects
     {
         id: 1,
-        title: 'TechStart India Dashboard',
-        category: 'Web Apps',
-        description: 'A comprehensive SaaS dashboard with real-time analytics and user management.',
-        image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop',
-        tags: ['React', 'Node.js', 'MongoDB'],
+        title: 'HiTech Solutions',
+        category: 'Video Projects',
+        description: 'High-tech industry showcase with modern design and interactive elements.',
+        video: '/hitech.mp4',
+        thumbnail: '/project1.png',
+        type: 'video',
+        tags: ['Video', 'Industrial', 'Tech'],
         featured: true
     },
     {
         id: 2,
-        title: 'Wellness Hub E-commerce',
-        category: 'E-commerce',
-        description: 'Premium wellness e-commerce platform with subscription services.',
-        image: 'https://images.unsplash.com/photo-1545205597-3d9d02c29597?w=800&h=600&fit=crop',
-        tags: ['Next.js', 'Stripe', 'Prisma'],
+        title: 'Industrial Manufacturing',
+        category: 'Video Projects',
+        description: 'Industrial manufacturing process visualization and company profile.',
+        video: '/indus.mp4',
+        thumbnail: '/project2.png',
+        type: 'video',
+        tags: ['Video', 'Manufacturing', 'Industrial'],
         featured: true
     },
     {
         id: 3,
-        title: 'EduLearn Platform',
-        category: 'Web Apps',
-        description: 'Interactive online learning platform with video courses and progress tracking.',
-        image: 'https://images.unsplash.com/photo-1501504905252-473c47e087f8?w=800&h=600&fit=crop',
-        tags: ['React', 'Firebase', 'Video'],
+        title: 'Pure Vitamin Products',
+        category: 'Video Projects',
+        description: 'Health and wellness product showcase with engaging visuals.',
+        video: '/itspurevit.mp4',
+        thumbnail: '/project3.png',
+        type: 'video',
+        tags: ['Video', 'Health', 'E-commerce'],
         featured: true
     },
     {
         id: 4,
-        title: 'BrandCo Agency Portfolio',
-        category: 'Websites',
-        description: 'Creative agency portfolio with stunning animations.',
-        image: 'https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=800&h=600&fit=crop',
-        tags: ['Next.js', 'GSAP', 'CMS'],
+        title: 'Maharaja Palace Heritage',
+        category: 'Video Projects',
+        description: 'Cultural heritage and tourism promotion video project.',
+        video: '/maharaja-palace.mp4',
+        thumbnail: '/project1.png',
+        type: 'video',
+        tags: ['Video', 'Tourism', 'Heritage'],
         featured: false
     },
+    // Image Gallery Projects
     {
         id: 5,
-        title: 'FinanceFlow Landing Page',
-        category: 'Landing Pages',
-        description: 'High-converting landing page for a fintech startup.',
-        image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop',
-        tags: ['React', 'Analytics'],
+        title: 'Placement Management System',
+        category: 'Web Apps',
+        description: 'Comprehensive placement management system for educational institutions.',
+        images: [
+            '/projects/placement-management/Screenshot (1456).png',
+            '/projects/placement-management/Screenshot (1457).png',
+            '/projects/placement-management/Screenshot (1458).png',
+            '/projects/placement-management/Screenshot (1459).png',
+            '/projects/placement-management/Screenshot (1460).png',
+            '/projects/placement-management/Screenshot (1461).png',
+            '/projects/placement-management/Screenshot (1462).png'
+        ],
+        type: 'gallery',
+        tags: ['React', 'Node.js', 'MongoDB'],
         featured: false
     },
     {
         id: 6,
-        title: 'Restaurant Booking System',
+        title: 'Student Dropout Analysis',
         category: 'Web Apps',
-        description: 'Complete restaurant management with online reservations.',
-        image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&h=600&fit=crop',
-        tags: ['Vue.js', 'Node.js'],
+        description: 'Data analytics platform for student dropout prediction and analysis.',
+        images: [
+            '/projects/student-dropout-analysis/Screenshot (1470).png',
+            '/projects/student-dropout-analysis/Screenshot (1471).png',
+            '/projects/student-dropout-analysis/Screenshot (1472).png',
+            '/projects/student-dropout-analysis/Screenshot (1473).png',
+            '/projects/student-dropout-analysis/Screenshot (1474).png',
+            '/projects/student-dropout-analysis/Screenshot (1475).png',
+            '/projects/student-dropout-analysis/Screenshot (1476).png',
+            '/projects/student-dropout-analysis/Screenshot (1477).png'
+        ],
+        type: 'gallery',
+        tags: ['Python', 'ML', 'Analytics'],
         featured: false
     },
     {
         id: 7,
-        title: 'Real Estate Listings',
+        title: 'Charitable Organization Site',
         category: 'Websites',
-        description: 'Modern real estate website with property listings.',
-        image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&h=600&fit=crop',
-        tags: ['Next.js', 'MapBox'],
+        description: 'Non-profit organization website with donation and volunteer management.',
+        images: [
+            '/projects/charitable-site/Screenshot (1495).png',
+            '/projects/charitable-site/Screenshot (1496).png',
+            '/projects/charitable-site/Screenshot (1497).png',
+            '/projects/charitable-site/Screenshot (1498).png',
+            '/projects/charitable-site/Screenshot (1499).png'
+        ],
+        type: 'gallery',
+        tags: ['React', 'Charity', 'CMS'],
         featured: false
     },
     {
         id: 8,
-        title: 'Fitness App Landing',
-        category: 'Landing Pages',
-        description: 'Dynamic landing page for a fitness application.',
-        image: 'https://images.unsplash.com/photo-1571902943202-507ec2618e8f?w=800&h=600&fit=crop',
-        tags: ['React', 'GSAP'],
+        title: 'Yummy Food Restaurant',
+        category: 'Websites',
+        description: 'Restaurant website with online ordering and menu management system.',
+        images: [
+            '/projects/yummy food/Screenshot (1463).png',
+            '/projects/yummy food/Screenshot (1464).png',
+            '/projects/yummy food/Screenshot (1465).png',
+            '/projects/yummy food/Screenshot (1466).png',
+            '/projects/yummy food/Screenshot (1467).png'
+        ],
+        type: 'gallery',
+        tags: ['React', 'E-commerce', 'Food'],
         featured: false
     }
 ];
+
+// Video Player Component - Only plays on hover
+const VideoPlayer = ({ src, isHovered }: { src: string; isHovered: boolean }) => {
+    const videoRef = useRef<HTMLVideoElement>(null);
+
+    useEffect(() => {
+        if (videoRef.current) {
+            if (isHovered) {
+                videoRef.current.play();
+            } else {
+                videoRef.current.pause();
+                videoRef.current.currentTime = 0;
+            }
+        }
+    }, [isHovered]);
+
+    return (
+        <video
+            ref={videoRef}
+            src={src}
+            loop
+            muted
+            playsInline
+            className="w-full h-full object-cover"
+        />
+    );
+};
+
+// Image Carousel Component - Only animates on hover
+const ImageCarousel = ({ images, isHovered }: { images: string[]; isHovered: boolean }) => {
+    const [currentIndex, setCurrentIndex] = useState(0);
+
+    useEffect(() => {
+        if (!isHovered) {
+            setCurrentIndex(0);
+            return;
+        }
+
+        const interval = setInterval(() => {
+            setCurrentIndex((prev) => (prev + 1) % images.length);
+        }, 2000);
+
+        return () => clearInterval(interval);
+    }, [isHovered, images.length]);
+
+    return (
+        <div className="relative w-full h-full">
+            {images.map((image, index) => (
+                <motion.img
+                    key={image}
+                    src={image}
+                    alt={`Slide ${index + 1}`}
+                    className="absolute inset-0 w-full h-full object-cover"
+                    initial={{ opacity: index === 0 ? 1 : 0 }}
+                    animate={{ opacity: currentIndex === index ? 1 : 0 }}
+                    transition={{ duration: 0.5 }}
+                />
+            ))}
+            {/* Carousel Indicators - Only show on hover */}
+            {isHovered && images.length > 1 && (
+                <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2 z-10">
+                    {images.map((_, index) => (
+                        <div
+                            key={index}
+                            className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
+                                currentIndex === index ? 'bg-white w-4' : 'bg-white/50'
+                            }`}
+                        />
+                    ))}
+                </div>
+            )}
+        </div>
+    );
+};
 
 export const PortfolioPage = () => {
     const [activeCategory, setActiveCategory] = useState('All');
@@ -168,15 +285,13 @@ export const PortfolioPage = () => {
                                 onMouseLeave={() => setHoveredProject(null)}
                                 className="group relative bg-white overflow-hidden cursor-pointer"
                             >
-                                <div className="relative h-72 overflow-hidden">
-                                    <motion.img
-                                        src={project.image}
-                                        alt={project.title}
-                                        className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
-                                        animate={{ scale: hoveredProject === project.id ? 1.1 : 1 }}
-                                        transition={{ duration: 0.6 }}
-                                    />
-                                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/60 transition-all duration-500" />
+                                <div className="relative h-72 overflow-hidden bg-neutral-100">
+                                    {project.type === 'video' ? (
+                                        <VideoPlayer src={project.video!} isHovered={hoveredProject === project.id} />
+                                    ) : (
+                                        <ImageCarousel images={project.images!} isHovered={hoveredProject === project.id} />
+                                    )}
+                                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-500" />
 
                                     {/* Hover Content */}
                                     <motion.div
@@ -248,14 +363,16 @@ export const PortfolioPage = () => {
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}
                                 transition={{ duration: 0.4, delay: index * 0.05 }}
+                                onMouseEnter={() => setHoveredProject(project.id)}
+                                onMouseLeave={() => setHoveredProject(null)}
                                 className="group bg-white overflow-hidden cursor-pointer"
                             >
-                                <div className="relative h-48 overflow-hidden">
-                                    <img
-                                        src={project.image}
-                                        alt={project.title}
-                                        className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700"
-                                    />
+                                <div className="relative h-48 overflow-hidden bg-neutral-100">
+                                    {project.type === 'video' ? (
+                                        <VideoPlayer src={project.video!} isHovered={hoveredProject === project.id} />
+                                    ) : (
+                                        <ImageCarousel images={project.images!} isHovered={hoveredProject === project.id} />
+                                    )}
                                 </div>
                                 <div className="p-5">
                                     <span className="text-xs uppercase tracking-[0.15em] text-neutral-400 mb-1 block">

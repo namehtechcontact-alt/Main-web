@@ -1,5 +1,4 @@
-import { motion, AnimatePresence } from 'framer-motion';
-import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 
 const testimonials = [
   {
@@ -23,140 +22,85 @@ const testimonials = [
 ];
 
 export const Testimonials = () => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  const handleNext = () => {
-    setCurrentIndex((prev) => (prev + 1) % testimonials.length);
-  };
-
-  const handlePrev = () => {
-    setCurrentIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
-  };
-
-  useEffect(() => {
-    const timer = setInterval(handleNext, 6000);
-    return () => clearInterval(timer);
-  }, [currentIndex]);
-
-  const currentTestimonial = testimonials[currentIndex];
-
   return (
-    <section className="bg-black text-white py-24 md:py-32 overflow-hidden">
-      <div className="max-w-7xl mx-auto px-6 md:px-12">
-        {/* Header */}
+    <section className="bg-[#050505] text-white py-24 md:py-32 relative overflow-hidden">
+      {/* Decorative background number */}
+      <div className="absolute top-10 right-10 text-[20vw] font-bold text-white/[0.02] leading-none pointer-events-none select-none">
+        03
+      </div>
+
+      <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className="flex flex-col md:flex-row md:items-end md:justify-between mb-16"
+          className="mb-16"
         >
-          <div>
-            <motion.div
-              initial={{ width: 0 }}
-              whileInView={{ width: '60px' }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
-              className="h-[1px] bg-white/40 mb-8"
-            />
-            <span className="text-xs font-medium uppercase tracking-[0.3em] text-neutral-500 mb-6 block">
-              Testimonials
-            </span>
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-light tracking-tight">
-              What our clients
-              <span className="block font-medium mt-2">say about us</span>
-            </h2>
-          </div>
-
-          {/* Navigation */}
-          <div className="flex items-center gap-4 mt-8 md:mt-0">
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              onClick={handlePrev}
-              className="w-12 h-12 border border-white/20 flex items-center justify-center hover:bg-white hover:text-black transition-all duration-300"
-            >
-              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none">
-                <path d="M15 18l-6-6 6-6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </motion.button>
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              onClick={handleNext}
-              className="w-12 h-12 bg-white text-black flex items-center justify-center hover:bg-neutral-200 transition-all duration-300"
-            >
-              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none">
-                <path d="M9 6l6 6-6 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </motion.button>
-          </div>
+          <motion.div
+            initial={{ width: 0 }}
+            whileInView={{ width: '80px' }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="h-[1px] bg-white opacity-40 mb-8"
+          />
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-medium tracking-tight">
+            Happy <span className="text-white/40">Clients</span>
+          </h2>
         </motion.div>
 
-        {/* Testimonial */}
-        <div className="relative min-h-[300px]">
-          <AnimatePresence mode="wait">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {testimonials.map((t, index) => (
             <motion.div
-              key={currentTestimonial.id}
+              key={t.id}
               initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -30 }}
-              transition={{ duration: 0.5 }}
-              className="grid md:grid-cols-12 gap-12"
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: index * 0.1 }}
+              viewport={{ once: true }}
+              className={`p-10 bg-neutral-900/40 border border-white/5 backdrop-blur-sm flex flex-col justify-between min-h-[350px] ${
+                index % 2 === 0 ? 'rounded-tl-[60px] rounded-br-[60px]' : 'rounded-tr-[60px] rounded-bl-[60px]'
+              }`}
             >
-              {/* Quote */}
-              <div className="md:col-span-8">
-                <svg className="w-12 h-12 text-white/10 mb-8" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
-                </svg>
-                <blockquote className="text-2xl md:text-3xl lg:text-4xl font-light leading-relaxed">
-                  "{currentTestimonial.quote}"
-                </blockquote>
+              <div>
+                <div className="flex gap-1 mb-8">
+                  {[...Array(5)].map((_, i) => (
+                    <svg key={i} className="w-4 h-4 text-white/40" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                    </svg>
+                  ))}
+                </div>
+                <p className="text-lg font-light leading-relaxed text-neutral-300">
+                  "{t.quote}"
+                </p>
               </div>
 
-              {/* Author */}
-              <div className="md:col-span-4 flex flex-col justify-end">
-                <div className="border-t border-white/10 pt-8">
-                  <div className="text-lg font-medium mb-1">{currentTestimonial.author}</div>
-                  <div className="text-sm text-neutral-500">{currentTestimonial.role}</div>
+              <div className="mt-12 flex items-center gap-4">
+                <div className="w-12 h-12 rounded-full bg-neutral-800 flex items-center justify-center text-xs font-bold border border-white/10">
+                  {t.author.split(' ').map(n => n[0]).join('')}
+                </div>
+                <div>
+                  <div className="font-medium text-white">{t.author}</div>
+                  <div className="text-xs text-neutral-500 uppercase tracking-widest">{t.role}</div>
                 </div>
               </div>
             </motion.div>
-          </AnimatePresence>
-        </div>
-
-        {/* Progress */}
-        <div className="flex gap-2 mt-16">
-          {testimonials.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => setCurrentIndex(index)}
-              className={`h-[2px] transition-all duration-500 ${index === currentIndex ? 'w-12 bg-white' : 'w-6 bg-white/20'
-                }`}
-            />
           ))}
         </div>
 
-        {/* Stats */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-          className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-24 pt-16 border-t border-white/10"
-        >
+        {/* Global Stats bar at bottom of testimonials */}
+        <div className="mt-24 pt-16 border-t border-white/5 grid grid-cols-2 md:grid-cols-4 gap-8">
           {[
             { value: '50+', label: 'Happy Clients' },
             { value: '100+', label: 'Projects Delivered' },
             { value: '5+', label: 'Years Experience' },
-            { value: '98%', label: 'Client Satisfaction' }
+            { value: '98%', label: 'Success Rate' }
           ].map((stat) => (
-            <div key={stat.label} className="text-center md:text-left">
-              <div className="text-3xl md:text-4xl font-light mb-2">{stat.value}</div>
-              <div className="text-xs uppercase tracking-[0.2em] text-neutral-500">{stat.label}</div>
+            <div key={stat.label}>
+              <div className="text-3xl font-light mb-2">{stat.value}</div>
+              <div className="text-[10px] uppercase tracking-[0.2em] text-neutral-600 font-bold">{stat.label}</div>
             </div>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

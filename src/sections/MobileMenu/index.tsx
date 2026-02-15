@@ -70,7 +70,7 @@ export const MobileMenu = () => {
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-6">
                           <span className="text-xs text-neutral-600 font-light">0{index + 1}</span>
-                          <span className={`text-3xl md:text-5xl font-light transition-colors duration-300 ${location.pathname === item.path
+                          <span className={`text-2xl md:text-4xl font-light transition-colors duration-300 ${location.pathname === item.path
                               ? 'text-white'
                               : 'text-neutral-400 group-hover:text-white'
                             }`}>

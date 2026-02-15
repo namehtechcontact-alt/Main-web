@@ -77,7 +77,7 @@ export const ContactForm = () => {
 
     try {
       // Replace this URL with your Google Apps Script Web App URL
-      const GOOGLE_SCRIPT_URL = 'YOUR_GOOGLE_SCRIPT_URL_HERE';
+      const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyYgIxZDrh4zr0CyTndCOVKGvcmkOCt5tPD7tTf6pmsrIW5FOd53dcllpN4TV3kQNUf9Q/exec';
       
       const formDataToSend = {
         name: formData.name,
@@ -88,7 +88,7 @@ export const ContactForm = () => {
         timestamp: new Date().toLocaleString()
       };
 
-      const response = await fetch(GOOGLE_SCRIPT_URL, {
+      await fetch(GOOGLE_SCRIPT_URL, {
         method: 'POST',
         mode: 'no-cors',
         headers: {
@@ -288,7 +288,7 @@ export const ContactForm = () => {
                                 : 'bg-white border-neutral-300'
                               }`}
                             whileHover={{ scale: 1.2 }}
-                            onClick={(e) => {
+                            onClick={(e: React.MouseEvent) => {
                               e.stopPropagation();
                               setBudgetIndex(index);
                             }}

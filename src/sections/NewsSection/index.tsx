@@ -1,157 +1,117 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { ThemeLiquidCard } from '../../components/ThemeLiquidCard';
 
-const services = [
+
+const insights = [
   {
-    number: "01",
-    title: "Website Development",
-    description: "Custom websites built with modern technologies. Responsive, fast, and SEO-optimized.",
-    features: ["React/Next.js", "Responsive Design", "SEO Ready"]
+    id: 1,
+    title: "The Future of Minimalist Web Design in 2024",
+    date: "MAR 12, 2024",
+    category: "Design",
+    image: "https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&q=80&w=600"
   },
   {
-    number: "02",
-    title: "Web Applications",
-    description: "Full-stack web applications that power your business operations and scale with you.",
-    features: ["Real-time Features", "Scalable APIs", "Cloud Ready"]
+    id: 2,
+    title: "How to Scale Your Web App for Global Traffic",
+    date: "FEB 28, 2024",
+    category: "Engineering",
+    image: "https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&q=80&w=600"
   },
   {
-    number: "03",
-    title: "E-commerce Solutions",
-    description: "Complete online stores with secure payments, inventory management, and analytics.",
-    features: ["Payment Integration", "Inventory Mgmt", "Analytics"]
-  },
-  {
-    number: "04",
-    title: "Landing Pages",
-    description: "High-converting landing pages designed to capture leads and drive conversions.",
-    features: ["A/B Testing", "Lead Capture", "Fast Loading"]
-  },
-  {
-    number: "05",
-    title: "UI/UX Design",
-    description: "Beautiful, intuitive interfaces that users love. From wireframes to polished designs.",
-    features: ["User Research", "Prototyping", "Design System"]
-  },
-  {
-    number: "06",
-    title: "Maintenance & Support",
-    description: "Ongoing care for your website with updates, security patches, and optimization.",
-    features: ["24/7 Support", "Security Updates", "Backups"]
+    id: 3,
+    title: "The Role of AI in Creative Digital Agencies",
+    date: "JAN 15, 2024",
+    category: "AI & Innovation",
+    image: "https://images.unsplash.com/photo-1535223289827-42f1e9919769?auto=format&fit=crop&q=80&w=600"
   }
 ];
 
 export const NewsSection = () => {
   return (
-    <section className="relative bg-neutral-50 overflow-hidden py-24 md:py-32">
-      {/* Subtle Pattern */}
-      <div className="absolute inset-0 opacity-[0.02]">
-        <div className="absolute inset-0" style={{
-          backgroundImage: `radial-gradient(circle at 1px 1px, black 1px, transparent 0)`,
-          backgroundSize: '40px 40px'
-        }} />
+    <section className="bg-white text-black py-24 md:py-32 relative overflow-hidden">
+      {/* Subtle background text */}
+      <div className="absolute bottom-10 left-10 text-[15vw] font-bold text-black/[0.01] leading-none pointer-events-none select-none">
+        INSIGHTS
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-          className="text-center mb-20"
-        >
+      <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-20">
           <motion.div
-            initial={{ width: 0 }}
-            whileInView={{ width: '60px' }}
-            transition={{ duration: 0.8 }}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
             viewport={{ once: true }}
-            className="h-[1px] bg-black mx-auto mb-8"
-          />
+          >
+            <motion.div
+              initial={{ width: 0 }}
+              whileInView={{ width: '80px' }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+              className="h-[1px] bg-black opacity-20 mb-8"
+            />
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-medium tracking-tight">
+              Team <span className="text-neutral-300">Insights</span>
+            </h2>
+          </motion.div>
 
-          <span className="text-xs font-medium uppercase tracking-[0.3em] text-neutral-500 mb-6 block">
-            Our Services
-          </span>
-
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-light tracking-tight mb-6">
-            Solutions that
-            <span className="block font-medium mt-2">drive results</span>
-          </h2>
-
-          <p className="text-lg text-neutral-500 max-w-xl mx-auto font-light">
-            Comprehensive web development services that help your business thrive.
-          </p>
-        </motion.div>
-
-        {/* Services Grid with Liquid Reveal */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-neutral-200">
-          {services.map((service, index) => (
-            <ThemeLiquidCard
-              key={service.title}
-              initialFill={0.93 + (index % 3) * 0.035}
-              className="group cursor-pointer hover:bg-neutral-50"
-            >
-              <div className="p-8 md:p-10 h-full flex flex-col">
-                {/* Number */}
-                <span className="text-4xl font-extralight opacity-30 block mb-6">
-                  {service.number}
-                </span>
-
-                {/* Content */}
-                <h3 className="text-lg font-medium mb-3">
-                  {service.title}
-                </h3>
-                <p className="opacity-60 text-sm leading-relaxed mb-5 flex-grow">
-                  {service.description}
-                </p>
-
-                {/* Features */}
-                <div className="flex flex-wrap gap-2 mt-auto">
-                  {service.features.map((feature) => (
-                    <span
-                      key={feature}
-                      className="px-2 py-1 border border-current opacity-60 text-xs tracking-wide"
-                    >
-                      {feature}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </ThemeLiquidCard>
-          ))}
-        </div>
-
-        {/* CTAs */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-16"
-        >
-          <Link to="/services">
+          <Link to="/blog">
             <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="px-10 py-5 bg-black text-white font-medium tracking-wide hover:bg-neutral-900 transition-all duration-300 flex items-center gap-4"
+              whileHover={{ x: 10 }}
+              className="flex items-center gap-3 text-sm font-bold uppercase tracking-[0.2em] mt-8 md:mt-0 group"
             >
-              View All Services
-              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none">
-                <path d="M5 12h14m-7-7l7 7-7 7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              All Articles
+              <svg className="w-5 h-5 group-hover:translate-x-2 transition-transform" viewBox="0 0 24 24" fill="none">
+                <path d="M5 12h14m-7-7l7 7-7 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </motion.button>
           </Link>
+        </div>
 
-          <Link to="/contact">
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="px-10 py-5 border border-black text-black font-medium tracking-wide hover:bg-black hover:text-white transition-all duration-300"
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-12">
+          {insights.map((insight, index) => (
+            <motion.article
+              key={insight.id}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: index * 0.1 }}
+              viewport={{ once: true }}
+              className="group cursor-pointer"
             >
-              Get a Quote
-            </motion.button>
-          </Link>
-        </motion.div>
+              <div className="relative mb-8 overflow-hidden rounded-sm transition-all duration-500">
+                <img 
+                  src={insight.image} 
+                  alt={insight.title}
+                  className={`w-full h-80 object-cover transition-transform duration-700 group-hover:scale-110 ${
+                    index % 2 === 0 ? 'rounded-tl-[60px]' : 'rounded-tr-[60px]'
+                  }`}
+                />
+                <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-md px-4 py-1.5 text-[10px] uppercase font-bold tracking-[0.2em] shadow-sm">
+                  {insight.category}
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-4 mb-4 text-[10px] font-bold text-neutral-400 tracking-[0.2em]">
+                {insight.date}
+                <div className="w-1 h-1 bg-neutral-300 rounded-full" />
+                5 MIN READ
+              </div>
+
+              <h3 className="text-2xl font-medium leading-tight mb-6 group-hover:text-neutral-600 transition-colors">
+                {insight.title}
+              </h3>
+
+              <motion.div
+                whileHover={{ x: 5 }}
+                className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] border-b border-black pb-1"
+              >
+                Read More
+                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none">
+                  <path d="M5 12h14m-7-7l7 7-7 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </motion.div>
+            </motion.article>
+          ))}
+        </div>
       </div>
     </section>
   );

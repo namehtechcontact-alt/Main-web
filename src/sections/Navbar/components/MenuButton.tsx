@@ -1,7 +1,11 @@
 import { motion } from 'framer-motion';
 import { useMenu } from '@/context/MenuContext';
 
-export const MenuButton = () => {
+interface MenuButtonProps {
+  isOnLightBg?: boolean;
+}
+
+export const MenuButton = ({ isOnLightBg = false }: MenuButtonProps) => {
   const { isMenuOpen, toggleMenu } = useMenu();
 
   return (
@@ -14,30 +18,33 @@ export const MenuButton = () => {
       onClick={toggleMenu}
       role="button"
       aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
-      className="bg-white text-black px-6 py-3 font-medium tracking-wide hover:bg-neutral-100 transition-all duration-300 pointer-events-auto flex items-center gap-4"
+      className={`px-6 py-3 font-medium tracking-wide transition-all duration-300 pointer-events-auto flex items-center gap-4 ${isOnLightBg ? 'bg-black text-white hover:bg-neutral-800 shadow-xl shadow-black/10' : 'bg-white text-black hover:bg-neutral-100'}`}
     >
       <span className="text-sm uppercase tracking-[0.15em]">{isMenuOpen ? 'Close' : 'Menu'}</span>
       <div className="flex flex-col gap-1.5 w-5">
         <motion.span
           animate={{
             rotate: isMenuOpen ? 45 : 0,
-            y: isMenuOpen ? 7 : 0
+            y: isMenuOpen ? 7 : 0,
+            backgroundColor: isOnLightBg ? '#fff' : '#000'
           }}
-          className="w-full h-[1px] bg-black origin-left"
+          className="w-full h-[1px] origin-left"
         />
         <motion.span
           animate={{
             opacity: isMenuOpen ? 0 : 1,
-            scaleX: isMenuOpen ? 0 : 1
+            scaleX: isMenuOpen ? 0 : 1,
+            backgroundColor: isOnLightBg ? '#fff' : '#000'
           }}
-          className="w-full h-[1px] bg-black"
+          className="w-full h-[1px]"
         />
         <motion.span
           animate={{
             rotate: isMenuOpen ? -45 : 0,
-            y: isMenuOpen ? -7 : 0
+            y: isMenuOpen ? -7 : 0,
+            backgroundColor: isOnLightBg ? '#fff' : '#000'
           }}
-          className="w-full h-[1px] bg-black origin-left"
+          className="w-full h-[1px] origin-left"
         />
       </div>
     </motion.button>
